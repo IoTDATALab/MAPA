@@ -1,0 +1,86 @@
+version: "2"
+services:
+
+  edge1:
+    image: edge
+   
+    restart: on-failure
+    tty: true
+
+    environment:
+      SPLIT : 0
+      NUM : 0
+      EPOCH : 100
+      DELAY : 3
+      MQTT_PORT : ${MQTT_PORT}
+      MQTT_IP: ${MQTT_IP}
+      TEST_NUM : ${TEST_NUM}
+      EDGE_NAME : 'EDGE_1'
+      RESULT_ROOT : ${RESULT_ROOT}
+    
+    volumes:
+      - ./edge/:/edge
+      
+  
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mosquitto -d
+        python3 edge-${METHOD}.py   ###
+  
+  edge2:
+    image: edge
+   
+    restart: on-failure
+    tty: true
+
+    environment:
+      SPLIT : 1
+      NUM : 21
+      EPOCH : 100
+      DELAY : 3
+      MQTT_PORT : ${MQTT_PORT}
+      MQTT_IP: ${MQTT_IP}
+      TEST_NUM : ${TEST_NUM}
+      EDGE_NAME : 'EDGE_2'
+      RESULT_ROOT : ${RESULT_ROOT}
+    
+    volumes:
+      - ./edge/:/edge
+      
+  
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mosquitto -d
+        python3 edge-${METHOD}.py  ####
+    
+  edge3:
+    image: edge
+   
+    restart: on-failure
+    tty: true
+
+    environment:
+      SPLIT : 2
+      NUM : 24
+      EPOCH : 100
+      DELAY : 3
+      MQTT_PORT : ${MQTT_PORT}
+      MQTT_IP: ${MQTT_IP}
+      TEST_NUM : ${TEST_NUM}
+      EDGE_NAME : 'EDGE_3'
+      RESULT_ROOT : ${RESULT_ROOT}
+    
+    volumes:
+      - ./edge/:/edge   
+      
+  
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mosquitto -d
+        python3 edge-${METHOD}.py  

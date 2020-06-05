@@ -1,0 +1,27 @@
+version: "2"
+services:
+
+  cloud:
+    image: cloud
+   
+    restart: on-failure
+    tty: true
+
+    environment:
+      DELAY : 3
+      MQTT_PORT : ${MQTT_PORT}
+      MQTT_IP: ${MQTT_IP}
+      TEST_NUM : ${TEST_NUM}
+      RESULT_ROOT : ${RESULT_ROOT}
+
+      
+  
+    command:
+      - /bin/sh
+      - -c
+      - |
+        mosquitto -d
+        python3 cloud-${METHOD}.py  
+
+    volumes:
+      - ./cloud/:/cloud
