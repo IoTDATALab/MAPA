@@ -287,7 +287,7 @@ Results_varepsilon = vis.line([0.], [1], win='varepsilon',
 # Compute the sampling ratio for moment account
 Sampled_ratio = args.user_sel_prob
 delta = 1. / Users_num_total ** 1.1 # delta in (varepsilon, delta)-DP
-# Privac loss of the first iteraiton
+# Privacy loss of the first iteraiton
 varepsilon = Privacy.ComputePrivacy(Sampled_ratio, args.z, 1, delta, 32)
 logs['varepsilon'].append(varepsilon)
 
