@@ -8,6 +8,7 @@ In order to compare the algorithm,we set up seven comparison methods for synchro
 |     Docker     |   18.09.7    |
 | Docker-compose |    1.24.1    |
 |    OpenSSH     |     7.6      |
+
 ##2.Project structure
 
 ```
