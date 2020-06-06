@@ -1,14 +1,11 @@
 # In cloud 
 CLOUD := cloud
-MQTT_IP ?= 192.168.0.101      # cloud device ip
-MQTT_PORT ?= 1884              
+MQTT_IP ?= 192.168.10.40      # cloud device ip
+MQTT_PORT ?= 1884           
 
 # In edge
 EDGES := edge1
-EDGES_NUM ?=1      #the number of edge device
-METHOD ?= NonDP         #NonDP,FixDP-S,FixDP-C,MAPA-S,MAPA-C,AdaClip1,AdaClip2
-BATCH_SIZE ?= 5
-EPOCH ?= 100
+METHOD ?= REDDIT_MAPA_S_Asyn_08_flat         #REDDIT_MAPA_C_Syn_08_flat FEMNIST_MAPA_C_Syn_05_flat...
 TEST_NUM ?= 30      
 RESULT_ROOT ?= './result/'
 
@@ -51,89 +48,77 @@ run:
 	@echo "Run the mqtt broker."
 	@ssh -F ./ssh_config ${CLOUD} bash -c "'cd ~/cloud;\
 		export METHOD=${METHOD};\
-		export DELAY=`expr ${EDGES_NUM} \* ${CONTAINER_NUM}`;\
 		export MQTT_IP=${MQTT_IP};\
 		export MQTT_PORT=${MQTT_PORT};\
 		docker-compose -f docker-compose.mqtt.yml up -d'"
 	@sleep 5
-
+ 
 	@for server in ${EDGES} ; do\
 		echo "Run the $$server.";\
 		ssh -F ./ssh_config $$server bash -c  "'cd ~/edge;\
 			export METHOD=${METHOD};\
-			export CLIENT_ID=$$server;\
-			export DELAY=`expr ${EDGES_NUM} \* ${CONTAINER_NUM}`;\
-			export EPOCH=${EPOCH};\
 			export MQTT_IP=${MQTT_IP};\
 			export MQTT_PORT=${MQTT_PORT};\
-			export BATCH_SIZE=${BATCH_SIZE};\
 			export TEST_NUM=${TEST_NUM};\
-			export DATA_ROOT=${DATA_ROOT};\
 			export RESULT_ROOT=${RESULT_ROOT};\
-			docker-compose up --scale edge=${CONTAINER_NUM} -d'";\
+			docker-compose up -d'";\
 	done
 	@sleep 5
 
 	@echo "Run the cloud."
 	@ssh -F ./ssh_config ${CLOUD} bash -c "'cd ~/cloud;\
 		export METHOD=${METHOD};\
-		export DELAY=`expr ${EDGES_NUM} \* ${CONTAINER_NUM}`;\
 		export MQTT_IP=${MQTT_IP};\
 		export MQTT_PORT=${MQTT_PORT};\
-		export BATCH_SIZE=${BATCH_SIZE};\
+		export TEST_NUM=${TEST_NUM};\
+    export RESULT_ROOT=${RESULT_ROOT};\
 		docker-compose up -d'"
 
 cloud_logs:
 	@echo "Show cloud's logs."
 	@ssh -F ./ssh_config ${CLOUD} bash -c  "'cd ~/cloud;\
 		export METHOD=${METHOD};\
-		export DELAY=`expr ${EDGES_NUM} \* ${CONTAINER_NUM}`;\
 		export MQTT_IP=${MQTT_IP};\
 		export MQTT_PORT=${MQTT_PORT};\
-		export BATCH_SIZE=${BATCH_SIZE};\
+		export TEST_NUM=${TEST_NUM};\
+    export RESULT_ROOT=${RESULT_ROOT};\
 		docker-compose logs -f'"
 
 logs:
 	@echo "Show chief edge node's logs."
-	@ssh -F ./ssh_config ${word 1, ${EDGES}} bash -c  "'cd ~/edge;\
+	@ssh -F ./ssh_config ${EDGES} bash -c  "'cd ~/edge;\
 			export METHOD=${METHOD};\
-			export CLIENT_ID=$$server;\
-			export EPOCH=${EPOCH};\
 			export MQTT_IP=${MQTT_IP};\
 			export MQTT_PORT=${MQTT_PORT};\
-			export BATCH_SIZE=${BATCH_SIZE};\
 			export TEST_NUM=${TEST_NUM};\
-			export DATA_ROOT=${DATA_ROOT};\
 			export RESULT_ROOT=${RESULT_ROOT};\
 		docker-compose logs -f'"
 
-.PHONY: result
 result:
-	@scp -F ./ssh_config -r ${word 1, ${EDGES}}:~/edge/result/  ./
-plot:
-	@bash -c  "'python3 edge/plot.py'"
+	@echo "Copy result."
+	@mkdir -p ./result
+	@scp -F ./ssh_config -r ${CLOUD}:~/cloud/result ./result
+	@mkdir -p ./result
+	@scp -F ./ssh_config -r ${EDGES}:~/edge/result ./result
 
 clean:
 	@echo "Clean the cloud"
 	@ssh -F ./ssh_config ${CLOUD} bash -c  "'cd ~/cloud;\
 		export METHOD=${METHOD};\
-		export DELAY=`expr ${EDGES_NUM} \* ${CONTAINER_NUM}`;\
 		export MQTT_IP=${MQTT_IP};\
 		export MQTT_PORT=${MQTT_PORT};\
-		export BATCH_SIZE=${BATCH_SIZE};\
-		docker-compose down --remove-orphans'"
+    export TEST_NUM=${TEST_NUM};\
+    export RESULT_ROOT=${RESULT_ROOT};\
+		docker-compose down --remove-orphans;\
+    rm -rf ./result/*'"
 
 	@echo "Clean the edges"
 	@for server in ${EDGES} ; do\
 		ssh -F ./ssh_config $$server bash -c  "'cd ~/edge;\
 			export METHOD=${METHOD};\
-			export CLIENT_ID=$$server;\
-			export EPOCH=${EPOCH};\
 			export MQTT_IP=${MQTT_IP};\
 			export MQTT_PORT=${MQTT_PORT};\
-			export BATCH_SIZE=${BATCH_SIZE};\
 			export TEST_NUM=${TEST_NUM};\
-			export DATA_ROOT=${DATA_ROOT};\
 			export RESULT_ROOT=${RESULT_ROOT};\
 			docker-compose down;\
 			rm -rf ./result/*'";\

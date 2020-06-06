@@ -24,13 +24,13 @@ def compute_log_moment(sample_ration, variance, iterataions, order):
     return np.log(moment)*iterataions
 
 def pdf_gauss_mp(x, sigma, mean):
-  return mp.mpf(1.) / mp.sqrt(mp.mpf("2.") * sigma ** 2 * mp.pi) * mp.exp(
+    return mp.mpf(1.) / mp.sqrt(mp.mpf("2.") * sigma ** 2 * mp.pi) * mp.exp(
       - (x - mean) ** 2 / (mp.mpf("2.") * sigma ** 2))
 
 def _to_np_float64(v):
-  if math.isnan(v) or math.isinf(v):
-    return np.inf
-  return np.float64(v)
+    if math.isnan(v) or math.isinf(v):
+       return np.inf
+    return np.float64(v)
 
 def _compute_eps(log_moments, delta):
     min_eps = float("inf")

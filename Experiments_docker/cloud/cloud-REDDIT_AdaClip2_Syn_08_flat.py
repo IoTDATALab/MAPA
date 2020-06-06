@@ -58,7 +58,7 @@ def on_connect(mqttc, obj, flags, rc):
 
 
 def on_message(mqttc, obj, msg):
-    # print("received: " + msg.topic + " " + str(msg.qos))
+    print("received: " + msg.topic + " " + str(msg.qos))
     msgQueue.put(msg.payload)
 
 
@@ -72,7 +72,6 @@ client.loop_start()
 
 if __name__ == '__main__':
 
-    epsilon = []
     Sampled_ratio = DELAY * BATCH_SIZE / m
     delta = 1. / m ** 1.1
 
@@ -86,7 +85,7 @@ if __name__ == '__main__':
 
     for t in range(T):
 
-        Indicator_ = torch.tensor([0.])    ##############
+        Indicator_ = torch.tensor([0.])
         Deta = init_deta(Layers_shape)
         for i in range(DELAY):
             msg = cPickle.loads(msgQueue.get())
@@ -109,10 +108,9 @@ if __name__ == '__main__':
         client.publish("adaclip2_params", cPickle.dumps(payload), 2)
 
         if t % TEST_NUM == 0:
-            man_file = open(RESULT_ROOT + '[Adaclip2_Budget]', 'w')
+            man_file = open(RESULT_ROOT + '[Adaclip2_Budget]' + '.txt', 'a')
             varepsilon = Privacy.ComputePrivacy(Sampled_ratio, z, t + 1, delta, 32)
-            epsilon.append(varepsilon)
-            print(epsilon, file=man_file)
+            man_file.write(str(varepsilon) + "\n")
             man_file.close()
 
     print(T)

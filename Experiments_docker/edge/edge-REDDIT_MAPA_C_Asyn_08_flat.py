@@ -223,7 +223,7 @@ def on_connect(mqttc, obj, flags, rc):
 
 
 def on_message(mqttc, obj, msg):
-    # print("received: " + msg.topic + " " + str(msg.qos))
+    print("received: " + msg.topic + " " + str(msg.qos))
     if msg.topic == "Halt":
         global isend
         mqttc.unsubscribe("mapa_params/" + CLIENT_ID)  #
@@ -242,10 +242,7 @@ client.subscribe([("init", 2), ("mapa_params/" + CLIENT_ID, 2), ("Halt", 2)])
 client.loop_start()
 
 if __name__ == '__main__':
-    acc = []
-    testloss = []
-    trainloss = []
-    epsilon = []
+
     test_idx = 1000  # test-number
 
     payload = cPickle.loads(msgQueue.get())
@@ -265,8 +262,7 @@ if __name__ == '__main__':
 
             # clip_bound style=Flat or Perlayer
             Clip_bound = ClipBound_gerate(Grad_Upper, Layer_nodes, style="Flat")
-            print("Clip_bound:  ", Clip_bound)
-
+            
             if isend:
                 break
 
@@ -291,7 +287,7 @@ if __name__ == '__main__':
                 correct = 0
                 correct_pad = 0
                 test_loss = 0
-                man_file1 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-Accuracy]', 'w')
+                man_file1 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-Accuracy]' + '.txt', 'a')
                 for batch_idx, (test_x, test_y) in enumerate(test_loader):
                     if batch_idx < test_idx:
 
@@ -314,23 +310,17 @@ if __name__ == '__main__':
                 test_loss /= test_idx
 
                 accuracy = (correct - correct_pad) / total
-                print("accuracy: ", accuracy)
-                acc.append(accuracy)
-                print(acc, file=man_file1)
+                man_file1.write(str(accuracy) + "\n")
                 man_file1.close()
 
-                man_file2 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-TestLoss]', 'w')
-                testloss.append(test_loss)
-                print("testloss:  ", test_loss)
-                print(testloss, file=man_file2)
+                man_file2 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-TestLoss]' + '.txt', 'a')
+                man_file2.write(str(test_loss) + "\n")
                 man_file2.close()
 
-                man_file3 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-TrainLoss]', 'w')
+                man_file3 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Mapa-TrainLoss]' + '.txt', 'a')
                 if step != 0:
                     train_loss /= TEST_NUM
-                print("trainloss:  ", train_loss)
-                trainloss.append(train_loss)
-                print(trainloss, file=man_file3)
+                man_file3.write(str(train_loss) + "\n")
                 man_file3.close()
                 train_loss = 0
 

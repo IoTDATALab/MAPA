@@ -36,7 +36,7 @@ def init_deta(Layers_shape):
 
 
 def ParamsUpdate(params, Deta, Clipbound):
-    std = z * Clipbound.norm() * math.sqrt(1 / (1 - c)) ###flat
+    std = z * Clipbound.norm() * math.sqrt(1 / (1 - c)) #flat
     for i in range(len(params)):
         #std = z * Clipbound[i].norm() * math.sqrt(1 / (1 - c)) 
         params[i] = params[i].float() + Deta[i] + std * torch.randn(Deta[i].shape)
@@ -77,8 +77,7 @@ client.subscribe("adaclip2/#", 2)
 client.loop_start()
 
 if __name__ == '__main__':
- 
-    epsilon = []
+
     Sampled_ratio = BATCH_SIZE / m
     delta = 1. / m**1.1
 
@@ -110,10 +109,9 @@ if __name__ == '__main__':
         client.publish(edgetopic, cPickle.dumps(payload), 2)
         
         if t % TEST_NUM == 0:
-            man_file = open(RESULT_ROOT + '[Adaclip2_Budget]', 'w')
+            man_file = open(RESULT_ROOT + '[Adaclip2_Budget]' + '.txt', 'a')
             varepsilon = Privacy.ComputePrivacy(Sampled_ratio, z, t+1, delta, 32)
-            epsilon.append(varepsilon)
-            print(epsilon, file=man_file)
+            man_file.write(str(varepsilon) + "\n")
             man_file.close()
 
     print(T)

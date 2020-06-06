@@ -237,7 +237,7 @@ def on_connect(mqttc, obj, flags, rc):
 
 
 def on_message(mqttc, obj, msg):
-    # print("received: " + msg.topic + " " + str(msg.qos))
+    print("received: " + msg.topic + " " + str(msg.qos))
     if msg.topic == "Halt":
         global isend
         mqttc.unsubscribe("adaclip2_params")
@@ -255,9 +255,7 @@ client.subscribe([("init", 2), ("adaclip2_params", 2), ("Halt", 2)])
 client.loop_start()
 
 if __name__ == '__main__':
-    acc = []
-    testloss = []
-    trainloss = []
+
     test_idx = 1000
 
     # theta + C
@@ -306,7 +304,7 @@ if __name__ == '__main__':
                 correct = 0
                 correct_pad = 0
                 test_loss = 0
-                man_file2 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-Accuracy]', 'w')
+                man_file1 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-Accuracy]' + '.txt', 'a')
                 for batch_idx, (test_x, test_y) in enumerate(test_loader):
                     if batch_idx < test_idx:
                         output = model(test_x)
@@ -324,24 +322,18 @@ if __name__ == '__main__':
                 test_loss /= test_idx
 
                 accuracy = (correct - correct_pad) / total
-                print("accuracy: ", accuracy)
-                acc.append(accuracy)
-                print(acc, file=man_file2)
+                man_file1.write(str(accuracy) + "\n")
+                man_file1.close()
+
+                man_file2 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-TestLoss]' + '.txt', 'a')
+                man_file2.write(str(test_loss) + "\n")
                 man_file2.close()
 
-                man_file3 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-TestLoss]', 'w')
-                testloss.append(test_loss)
-                print("testloss:  ", test_loss)
-                print(testloss, file=man_file3)
-                man_file3.close()
-
-                man_file4 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-TrainLoss]', 'w')
+                man_file3 = open(RESULT_ROOT + '[' + str(EDGE_NAME) + ']' + '[Adaclip2-TrainLoss]' + '.txt', 'a')
                 if step != 0:
                     train_loss /= TEST_NUM
-                print("trainloss:  ", train_loss)
-                trainloss.append(train_loss)
-                print(trainloss, file=man_file4)
-                man_file4.close()
+                man_file3.write(str(train_loss) + "\n")
+                man_file3.close()
                 train_loss = 0
 
             step += 1

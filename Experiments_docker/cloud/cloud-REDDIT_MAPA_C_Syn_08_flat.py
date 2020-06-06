@@ -71,7 +71,6 @@ if __name__ == '__main__':
 
     Stage_count = 1
     total_step = 0
-    epsilon = []
     Sampled_ratio = DELAY * BATCH_SIZE / m
     delta = 1. / m ** 1.1
     for t in range(T):
@@ -97,7 +96,6 @@ if __name__ == '__main__':
             for i in range(len(grads_sum)):
                 grads_sum[i] /= DELAY
 
-            print(Clipbound)
             grads_noise = Add_noise(grads_sum, Clipbound)
 
             for i in range(len(params)):
@@ -108,10 +106,9 @@ if __name__ == '__main__':
             client.publish("mapa_params", cPickle.dumps(payload), 2)
 
             if total_step % TEST_NUM == 0:
-                man_file = open(RESULT_ROOT + '[MAPA_Budget]', 'w')
+                man_file = open(RESULT_ROOT + '[MAPA_Budget]' + '.txt', 'a')
                 varepsilon = Privacy.ComputePrivacy(Sampled_ratio, z, total_step + 1, delta, 32)
-                epsilon.append(varepsilon)
-                print(epsilon, file=man_file)
+                man_file.write(str(varepsilon)+"\n")
                 man_file.close()
             total_step += 1
             #print('Stage number: {}, Stage_Lr = {}, Stage_iterations = {}'.format(Stage_count, LR, ts + 1))

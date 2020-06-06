@@ -49,8 +49,7 @@ if __name__ == '__main__':
 
     params = InitializeParameters()
     client.publish("init", cPickle.dumps(params), 2)
-    
-    epsilon = []
+
     Sampled_ratio = BATCH_SIZE / m
     delta = 1. / m**1.1
 
@@ -70,10 +69,9 @@ if __name__ == '__main__':
         client.publish(edgetopic, cPickle.dumps(params), 2)
         
         if t % TEST_NUM == 0:
-            man_file = open(RESULT_ROOT + '[Adaclip1_Budget]', 'w')
+            man_file = open(RESULT_ROOT + '[Adaclip1_Budget]' + '.txt', 'a')
             varepsilon = Privacy.ComputePrivacy(Sampled_ratio, z, t+1, delta, 32)
-            epsilon.append(varepsilon)
-            print(epsilon, file=man_file)
+            man_file.write(str(varepsilon)+"\n")
             man_file.close()
 
         

@@ -9,10 +9,11 @@ services:
 
     environment:
       DELAY : 3
+      EPOCH : 1
       MQTT_PORT : ${MQTT_PORT}
       MQTT_IP: ${MQTT_IP}
       TEST_NUM : ${TEST_NUM}
-      RESULT_ROOT : ${RESULT_ROOT}
+      RESULT_ROOT : './result/'
 
       
   
@@ -24,4 +25,4 @@ services:
         python3 cloud-${METHOD}.py  
 
     volumes:
-      - ./cloud/:/cloud
+      - ./result/:/result
