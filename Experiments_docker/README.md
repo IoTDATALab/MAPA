@@ -2,21 +2,21 @@
 Multi-stage adjustable private algorithm(MAPA) by computational differential privacy (DP) to protect the training process,focusing on the impacts of noise on the machine learning in AFL and a better trade-off between the model accuracy and privacy guarantee to improve the trade-off by dynamically adjusting the variance of noise
 
 In order to compare the algorithm,we set up seven comparison methods for synchronous and asynchronous mode,including NonDP,FixDP-S,FixDP-C,MAPA-S,MAPA-C,AdaClip1 and AdaClip2. And the algorithm is encapsulated in the docker container and defined by the makefile.
-## 1.Environment Deployment
+## 1. Environment Deployment
 
 |     Python     |     3.6      |
 |     Docker     |   18.09.7    |
 | Docker-compose |    1.24.1    |
 |    OpenSSH     |     7.6      |
 
-##2.Project structure
+## 2. Project structure
 
 ```
-©À©¤©¤cloud
-|    ©À©¤©¤ cloud-REDDIT_NonDP_Asyn_08_flat.py       
-|    ©À©¤©¤ cloud-REDDIT_FixDP_S_Asyn_08_flat.py            
-|    ©À©¤©¤ cloud-REDDIT_FixDP_C_Asyn_08_flat.py  
-|    ©À©¤©¤ cloud-REDDIT_MAPA_S_Asyn_08_flat.py  
+|----cloud
+|     |----cloud-REDDIT_NonDP_Asyn_08_flat.py       
+|     |----cloud-REDDIT_FixDP_S_Asyn_08_flat.py            
+|     |----cloud-REDDIT_FixDP_C_Asyn_08_flat.py  
+|     |----cloud-REDDIT_MAPA_S_Asyn_08_flat.py  
          ......
 |    ©À©¤©¤ cloud-FEMNIST_NonDP_Asyn_05_flat.py
 |    ©À©¤©¤ cloud-FEMNIST_FixDP_S_Asyn_05_flat.py
@@ -59,7 +59,7 @@ In order to compare the algorithm,we set up seven comparison methods for synchro
 
 ```
 
-## 3.Network Configuration
+## 3. Network Configuration
 Before the application runs, first perform the network configuration of the user operating device and the working node, and write the network topology to the `ssh_config` file, such as:
 ```
 Host cloud
@@ -74,7 +74,7 @@ Host edge1                                     #Node name
 
 ```
 
-## 4.Parameter settings
+## 4. Parameter settings
 Algorithm-related parameters are defined in the Makefile,such as:
 ```
 # In cloud 
@@ -90,7 +90,7 @@ RESULT_ROOT ?= './result/'           #result directory
 
 ```
 
-## 5.Run
+## 5. Run
 Before using our model, download the datasets from http://leaf.cmu.edu and put them under the data folder. 
 Under the project folder, execute the shell command to apply the project:
 * Perform network configuration between the user-operated device and the working node, including the configuration of ssh-free operation. After completing this step, the user operates the device to perform algorithm-related steps on other working nodes directly through ssh.
