@@ -12,50 +12,50 @@ In order to compare the algorithm,we set up seven comparison methods for synchro
 ## 2. Project structure
 
 ```
-|----cloud
-|     |----cloud-REDDIT_NonDP_Asyn_08_flat.py       
-|     |----cloud-REDDIT_FixDP_S_Asyn_08_flat.py            
-|     |----cloud-REDDIT_FixDP_C_Asyn_08_flat.py  
-|     |----cloud-REDDIT_MAPA_S_Asyn_08_flat.py  
+|---- cloud
+|     |---- cloud-REDDIT_NonDP_Asyn_08_flat.py       
+|     |---- cloud-REDDIT_FixDP_S_Asyn_08_flat.py            
+|     |---- cloud-REDDIT_FixDP_C_Asyn_08_flat.py  
+|     |---- cloud-REDDIT_MAPA_S_Asyn_08_flat.py  
          ......
-|    ©À©¤©¤ cloud-FEMNIST_NonDP_Asyn_05_flat.py
-|    ©À©¤©¤ cloud-FEMNIST_FixDP_S_Asyn_05_flat.py
-|    ©À©¤©¤ cloud-FEMNIST_FixDP_C_Asyn_05_flat.py
-|    ©À©¤©¤ cloud-FEMNIST_MAPA_S_Asyn_05_flat.py
+|     |---- cloud-FEMNIST_NonDP_Asyn_05_flat.py
+|     |---- cloud-FEMNIST_FixDP_S_Asyn_05_flat.py
+|     |---- cloud-FEMNIST_FixDP_C_Asyn_05_flat.py
+|     |---- cloud-FEMNIST_MAPA_S_Asyn_05_flat.py
          ......       
-|    ©À©¤©¤ Dockerfile               Docker image build file
-|    ©À©¤©¤ docker-compose.yml       Defining YAML files for services, networks, and volumes
-|    ©À©¤©¤ docker-compose.mqtt.yml  Edge and cloud communication
-|    ©À©¤©¤ ComputePrivacy.py        Calculate privacy budget
-|    ©À©¤©¤ params.py                Initialization parameters of LSTM model
-|    ©À©¤©¤ params_f.py              Initialization parameters of CNN model
-|    ©¸©¤©¤  result                              Output
-          ©¸©¤©¤ [METHOD_Budget].txt      
+|     |---- Dockerfile               Docker image build file
+|     |---- docker-compose.yml       Defining YAML files for services, networks, and volumes
+|     |---- docker-compose.mqtt.yml  Edge and cloud communication
+|     |---- ComputePrivacy.py        Calculate privacy budget
+|     |---- params.py                Initialization parameters of LSTM model
+|     |---- params_f.py              Initialization parameters of CNN model
+|     |---- result                              Output
+          |---- [METHOD_Budget].txt      
 
-|
-©À©¤©¤edge  
-|    ©À©¤©¤ edge-REDDIT_NonDP_Asyn_08_flat.py       
-|    ©À©¤©¤ edge-REDDIT_FixDP_S_Asyn_08_flat.py            
-|    ©À©¤©¤ edge-REDDIT_FixDP_C_Asyn_08_flat.py  
-|    ©À©¤©¤ edge-REDDIT_MAPA_S_Asyn_08_flat.py  
-         ......
-|    ©À©¤©¤ edge-FEMNIST_NonDP_Asyn_05_flat.py
-|    ©À©¤©¤ edge-FEMNIST_FixDP_S_Asyn_05_flat.py
-|    ©À©¤©¤ edge-FEMNIST_FixDP_C_Asyn_05_flat.py
-|    ©À©¤©¤ edge-FEMNIST_MAPA_S_Asyn_05_flat.py
-         ......
-|    ©À©¤©¤ Dockerfile    
-|    ©À©¤©¤ docker-compose.yml              
-|    ©À©¤©¤ data                               Datasets
-|    ©À   ©¸©¤©¤FEMNIST ¡¢REDDIT
-|    ©¸©¤©¤  result                              Output
-|         ©¸©¤©¤ [EDGE_NAME][METHOD-Accuracy].txt    
-          ©¸©¤©¤ [EDGE_NAME][METHOD-TestLoss].txt    
-          ©¸©¤©¤ [EDGE_NAME][METHOD-TrainLoss].txt  
 
-©À©¤©¤Makefile                          Setting parameters    
-©À©¤©¤README.md
-©¸©¤©¤ssh_config
+|---- edge  
+|     |---- edge-REDDIT_NonDP_Asyn_08_flat.py       
+|     |---- edge-REDDIT_FixDP_S_Asyn_08_flat.py            
+|     |---- edge-REDDIT_FixDP_C_Asyn_08_flat.py  
+|     |---- edge-REDDIT_MAPA_S_Asyn_08_flat.py  
+         ......
+|     |---- edge-FEMNIST_NonDP_Asyn_05_flat.py
+|     |---- edge-FEMNIST_FixDP_S_Asyn_05_flat.py
+|     |---- edge-FEMNIST_FixDP_C_Asyn_05_flat.py
+|     |---- edge-FEMNIST_MAPA_S_Asyn_05_flat.py
+         ......
+|     |---- Dockerfile    
+|     |---- docker-compose.yml              
+|     |---- data                               Datasets
+|            |----FEMNIST ¡¢REDDIT
+|     |---- result                              Output
+|           |---- [EDGE_NAME][METHOD-Accuracy].txt    
+            |---- [EDGE_NAME][METHOD-TestLoss].txt    
+            |---- [EDGE_NAME][METHOD-TrainLoss].txt  
+
+|-----Makefile                          Setting parameters    
+|----- README.md
+|----- ssh_config
 
 ```
 
