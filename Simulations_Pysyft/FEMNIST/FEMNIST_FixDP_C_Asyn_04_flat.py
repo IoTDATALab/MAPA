@@ -126,7 +126,7 @@ def TensorClip(Tensor, ClipBound):
 
 ################ Dfine adding noise ###################
 def AddNoise(Tensor, Clipboud):
-    std = args.z * Clipboud / (args.users_total * args.user_sel_prob)
+    std = args.z / (args.users_total * args.user_sel_prob)
     if len(Clipboud) == 1:
         for i in range(len(Tensor)):
             Tensor[i] = Tensor[i] + std * Clipboud[0] * torch.randn(Tensor[i].shape)
