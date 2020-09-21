@@ -27,7 +27,7 @@ class Arguments():
         self.grad_upper_bound = torch.tensor([1.])  # clipbound
         self.redu_ratio = torch.tensor(0.8)   # Reductio ratio
         self.inital_bound = 1000   # Initial estimation of f(x_1)-f(x^*)
-        self.z = 0.4  # Noise parameter z in Gaussian noise N(0, (zS)^2) where S is sensitivity
+        self.z = 0.8  # Noise parameter z in Gaussian noise N(0, (zS)^2) where S is sensitivity
         self.users_total = 800  # Total number of users/devices
         self.user_sel_prob = 0.02  # Probability for sampling users/devices at each iteration
         self.itr_numbers = 6000  # Number of total iterations
@@ -151,7 +151,7 @@ def TensorClip(Tensor, ClipBound):
 
 #################### Add noise ######################
 def AddNoise(Tensor, Clipboud):
-    std = args.z * Clipboud / (args.users_total * args.user_sel_prob)
+    std = args.z / (args.users_total * args.user_sel_prob)
     if len(Clipboud) == 1:
         for i in range(len(Tensor)):
             Tensor[i] = Tensor[i] + std * Clipboud[0] * torch.randn(Tensor[i].shape)
